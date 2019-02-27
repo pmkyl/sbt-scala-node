@@ -40,7 +40,10 @@ RUN groupadd --gid 1000 node \
 # Define working directory
 WORKDIR /root
 
-ENV NODE_VERSION 10.15.1
+RUN getent group node || groupadd --gid 1000 node \
+  && id -u node &>/dev/null || useradd --uid 1000 --gid node --shell /bin/bash --create-home node
+
+ENV NODE_VERSION 11.8.0
 
 RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
   && case "${dpkgArch##*-}" in \
